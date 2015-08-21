@@ -1,6 +1,6 @@
 ## 基础类型
 为了让程序更为有用，我们需要使用一些数据的最小单元：数字、字符串、结构体、布尔值等等。在TypeScript中，除了支持JavaScript中已知的类型，还在此基础上引入了实用的枚举类型。
-</br>
+</br></br>
 ### 布尔类型（Boolean）
 最基本的数据类型便是true/false值，它在JavaScript和TypeScript（当然包括其他语言）中被称为“布尔”值。
 ```TypeScript
@@ -13,14 +13,14 @@ var isDone: boolean = false;
 var height: number = 6;
 ```
 </br>
-### 字符串（String）
+### 字符串类型（String）
 另一种在为网页和服务器编写JavaScript程序的基本是使用文本数据。在其他语言中，我们使用“字符串”类型来表达这些文字数据。和JavaScript一样，TypeScript使用双引号（")或单引号（'）来包围文字数据。
 ```TypeScript
 var name: string = "bob";
 name = 'smith';
 ```
 </br>
-### 数组（Array）
+### 数组类型（Array）
 TypeScript类似于JavaScript，允许你使用数组类型。数组类型可以用以下两种方式书写。第一种方式是特定类型后跟上“[]”来表示该种类型的数组：
 ```TypeScript
 var list:number[] = [1, 2, 3];
@@ -30,7 +30,7 @@ var list:number[] = [1, 2, 3];
 var list:Array<number> = [1, 2, 3];
 ```
 </br>
-### 枚举（Enum）
+### 枚举类型（Enum）
 在JavaScript标准数据类型之外增加的一种实用类型是“枚举”类型。类似C#之类的语言，枚举类型是一种使用一个友好名称来表示一组数值的方法。
 ```TypeScript
 enum Color {Red, Green, Blue};
