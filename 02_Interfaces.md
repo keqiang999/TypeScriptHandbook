@@ -133,3 +133,112 @@ interface Dictionary {
 } 
 ```
 ### 类类型
+#### 实现一个接口
+在C#和Java之类语言中，接口最普遍的的用处是让类显式强制符合特定约定，在TypeScript中也是如此。
+```TypeScript
+interface ClockInterface {
+    currentTime: Date;
+}
+
+class Clock implements ClockInterface  {
+    currentTime: Date;
+    constructor(h: number, m: number) { }
+}
+```
+你同样可以用类中实现的一个方法来描述接口中的方法，正如我们在下面例子中“setTime”方法所做的：
+```TypeScript
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date);
+}
+
+class Clock implements ClockInterface  {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(h: number, m: number) { }
+}
+```
+接口描述了类的公有侧，而非公有和私有两方。这阻止你使用它来检测一个类实例私有部分的类型。
+#### 类的静态、实例之间的区别
+当使用类和接口的时候，它帮助我们注意到类有两种类型：静态类型和实例化类型。你可能会注意到如果你创建了一个有构造标记的接口并试图创建一个继承该接口的类，你会得到一个错误：
+```TypeScript
+interface ClockInterface {
+    new (hour: number, minute: number);
+}
+
+class Clock implements ClockInterface  {
+    currentTime: Date;
+    constructor(h: number, m: number) { }
+}
+```
+这是因为当一个类继承接口时，只有类的实例化部分被检测到。当结构体处于静态方式时，它并不被包含在检测中。
+</br>
+取而代之的是，你可能需要直接使用类的“静态”侧。在这个例子中，我们直接使用了这个类：
+```TypeScript
+interface ClockStatic {
+    new (hour: number, minute: number);
+}
+
+class Clock  {
+    currentTime: Date;
+    constructor(h: number, m: number) { }
+}
+
+var cs: ClockStatic = Clock;
+var newClock = new cs(7, 30);
+```
+</br>
+### 扩展接口
+和类一样，接口亦可以互相扩展。这可以控制将一个接口中的成员拷贝到另一个接口中的任务，允许你更自由的分割接口为可复用组件。
+```TypeScript
+interface Shape {
+    color: string;
+}
+
+interface Square extends Shape {
+    sideLength: number;
+}
+
+var square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+```
+一个接口可以扩展多个接口，来创建一个所有这些接口的合集。
+```TypeScript
+interface Shape {
+    color: string;
+}
+
+interface PenStroke {
+    penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
+
+var square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+square.penWidth = 5.0;
+```
+</br>
+### 混合类型
+正如之前提到的，接口可以描述存在于真实世界中JavaScript的丰富类型。得益于JavaScript动态而灵活的生态，你可能偶尔会碰到一个对象是由上面那些类型组合起来的整体。
+</br>
+一个这样的例子是一个对象同时扮演了一个函数和对象，并附加了属性：
+```TypeScript
+interface Counter {
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+
+var c: Counter;
+c(10);
+c.reset();
+c.interval = 5.0;
+```
+当引入了第三方JavaScript脚本，你可能需要用这种模式来完全描述类型。
