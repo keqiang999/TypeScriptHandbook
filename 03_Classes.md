@@ -117,3 +117,50 @@ class Animal {
 以这种方式使用“private”来创建和初始化一个私有成员，“public”时也是类似的。
 <br><br>
 ## 访问器
+TypeScript支持getter/setter方法来作为一个拦截到一个对象成员访问的方式。这给你一个获得更好控制如何访问每个对象中成员的方式。
+<br><br>
+让我们使用‘get’和‘set’来转换一个简单的类。首先，让我们用一个未使用访问器器的例子开始。
+```TypeScript
+class Employee {
+    fullName: string;
+}
+
+var employee = new Employee();
+employee.fullName = "Bob Smith";
+if (employee.fullName) {
+    alert(employee.fullName);
+}
+```
+虽然允许人们能随意地直接设定fullName变量十分便利，但这会在别人带有恶意地修改名字时带来麻烦。
+<br><br>
+在这个版本中，我们在允许用户修改职员信息前进行了检查以确保用户拥有一个有效的验证码。我们将直接访问fullName变量的方式替换为一个会检查验证码的‘set’函数。我们增加一个对应的‘get’函数来允许之前的例子能无缝运作。
+```TypeScript
+var passcode = "secret passcode";
+
+class Employee {
+    private _fullName: string;
+
+    get fullName(): string {
+        return this._fullName;
+    }
+	
+    set fullName(newName: string) {
+        if (passcode && passcode == "secret passcode") {
+            this._fullName = newName;
+        }
+        else {
+            alert("Error: Unauthorized update of employee!");
+        }
+    }
+}
+
+var employee = new Employee();
+employee.fullName = "Bob Smith";
+if (employee.fullName) {
+    alert(employee.fullName);
+}
+```
+为了自我验证我们的访问器现在会检查验证满，我们可以修改验证码，之后便能看到当验证码不匹配时我们会看到一个警告框告诉我们没有权限去更新职员信息。
+<br><br>
+注意：访问器需要你设置编译器输出为ECMAScript5.
+## 静态属性
