@@ -163,4 +163,103 @@ if (employee.fullName) {
 为了自我验证我们的访问器现在会检查验证满，我们可以修改验证码，之后便能看到当验证码不匹配时我们会看到一个警告框告诉我们没有权限去更新职员信息。
 <br><br>
 注意：访问器需要你设置编译器输出为ECMAScript5.
+<br><br>
 ## 静态属性
+在这节之前，我们仅仅是在讨论类的实例化成员，它们仅在对象实例化后才会出现。我们同样可以创建类的静态成员，它们可于类自身中可见而非实例。在这个例子中，我们给orgin变量使用‘static’关键字，使其作为所有网格的通用值。每个实例通过加上类名来访问这个值。类似实例访问是在前面加上‘this.’，这里我们加上‘Grid.’来进行静态访问。
+```TypeScript
+class Grid {
+    static origin = {x: 0, y: 0};
+    calculateDistanceFromOrigin(point: {x: number; y: number;}) {
+        var xDist = (point.x - Grid.origin.x);
+        var yDist = (point.y - Grid.origin.y);
+        return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
+    }
+    constructor (public scale: number) { }
+}
+
+var grid1 = new Grid(1.0);  // 1x scale
+var grid2 = new Grid(5.0);  // 5x scale
+
+alert(grid1.calculateDistanceFromOrigin({x: 10, y: 10}));
+alert(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
+```
+<br><br>
+## 高级技巧
+### 构造函数
+当你在TypeScript中声明一个类时，你实际上同时创建了多个声明。第一个是类的实例的类型。
+```TypeScript
+class Greeter {
+    greeting: string;
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        return "Hello, " + this.greeting;
+    }
+}
+
+var greeter: Greeter;
+greeter = new Greeter("world");
+alert(greeter.greet());
+```
+在这里，当我们在说“var greeter: Greeter”的时候，我们使用Greeter来作为实例的类型。这对于其他面向对象语言编程来说几乎是第二天性。
+<br><br>
+我们同样创建了另一个我们成为结构函数的值。这个方法在当我们新建一个类实例的时候会被调用。来看看练习中会发生什么，让我们看看上面例子生成的JavaScript代码：
+```JavaScript
+var Greeter = (function () {
+    function Greeter(message) {
+        this.greeting = message;
+    }
+    Greeter.prototype.greet = function () {
+        return "Hello, " + this.greeting;
+    };
+    return Greeter;
+})();
+
+var greeter;
+greeter = new Greeter("world");
+alert(greeter.greet());
+```
+在这里，‘var Greeter’就是将要被分配的结构体函数。当我们调用‘new’并运行这个函数，我们获得了一个类的示例。这个结构体函数同样包含了类中所有的静态成员。另一个对于每个类的思考方式是一个示例包含示例侧和静态侧。
+<br><br>
+让我们小小修改下例子来看看不同：
+```TypeScript
+class Greeter {
+    static standardGreeting = "Hello, there";
+    greeting: string;
+    greet() {
+        if (this.greeting) {
+            return "Hello, " + this.greeting;
+        }
+        else {
+            return Greeter.standardGreeting;
+        }
+    }
+}
+
+var greeter1: Greeter;
+greeter1 = new Greeter();
+alert(greeter1.greet());
+
+var greeterMaker: typeof Greeter = Greeter;
+greeterMaker.standardGreeting = "Hey there!";
+var greeter2:Greeter = new greeterMaker();
+alert(greeter2.greet());
+```
+在这个例子中，‘greeter1’以和之前类似的方式运行。我们实例化了‘Greeter’类，并且使用了这个对象。正如我们之前所见。
+<br><br>
+下一步，我们直接使用了这个类。这里我们创建了一个叫做‘greeterMaker’的变量。这个变量将会持有类本身，或者说是它自身的结构体函数。这里我们使用‘typeof Greeter’，这是“给我Greeter类自身的类型”而非实例的类型。或者更准确地说，“给我叫做Greeter的这个符号的类型”，来获得结构体函数的类型。这个类型基于创建Greeter类实例的结构体将包括所有Greeter的静态成员。我们通过对‘greeterMaker’使用‘new’来展示这个，创建新的‘Greeter’实例并调用他们。
+### 将类作为接口使用
+正如我们之前所说，一个类声明创建了两样东西：一个该类的实例类型和一个结构体函数。因为类创建类型，你可以作为接口在同一个地方使用它们。
+```TypeScript
+class Point {
+    x: number;
+    y: number;
+}
+
+interface Point3d extends Point {
+    z: number;
+}
+
+var point3d: Point3d = {x: 1, y: 2, z: 3};
+```
