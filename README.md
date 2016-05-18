@@ -10,7 +10,7 @@ TypeScript官方手册个人汉化
 源文本最后更新日期： 2016-5-17
 
 # 目录
-1. Basic Types
+1. [基本类型](01_Basic_Types.md)
 * Variable Declarations
 * Interfaces
 * Classes
