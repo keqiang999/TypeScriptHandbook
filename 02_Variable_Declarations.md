@@ -1,29 +1,29 @@
-# 变量申明
+# 变量声明
 
-`let`和`const`是JavaScript中两种相对较新的变量申明方式。
+`let`和`const`是JavaScript中两种相对较新的变量声明方式。
 正如我们之前所提到的，`let`和`var`在一些方面是相似的，但它能让使用者避免一些在JavaScript中常见的陷阱。
 `const`是`let`的一个强化版，用于阻止重新对变量进行赋值。
 
 TypeScript作为JavaScript的超集，其理所当然的支持`let`和`const`。
-这里我们将更多地阐述这些新的申明方式，以及为何它们优于`var`的方式。
+这里我们将更多地阐述这些新的声明方式，以及为何它们优于`var`的方式。
 
 如果你以毫不在意的方式使用JavaScript，那下一节内容将会很好地刷新你的记忆。
-如果你非常熟悉JavaScript中`var`申明方式的各种怪癖，你可能这些内容很容易被接受。
+如果你非常熟悉JavaScript中`var`声明方式的各种怪癖，你可能这些内容很容易被接受。
 
-# `var` 申明方式
+# `var` 声明方式
 
 Declaring a variable in JavaScript has always traditionally been done with the `var` keyword.
-在JavaScript中申明变量一直使用传统的`var`关键字来完成。
+在JavaScript中声明变量一直使用传统的`var`关键字来完成。
 
 ```ts
 var a = 10;
 ```
 
 As you might've figured out, we just declared a variable named `a` with the value `10`.
-正如你所想到的，我们申明了一个命名为`a`且值为`10`的变量。
+正如你所想到的，我们声明了一个命名为`a`且值为`10`的变量。
 
 We can also declare a variable inside of a function:
-我们同样可以在函数中申明一个变量：
+我们同样可以在函数中声明一个变量：
 
 ```ts
 function f() {
@@ -52,7 +52,7 @@ g(); // returns 11;
 In this above example, `g` captured the variable `a` declared in `f`.
 At any point that `g` gets called, the value of `a` will be tied to the value of `a` in `f`.
 Even if `g` is called once `f` is done running, it will be able to access and modify `a`.
-在上面的例子里，`g`捕获到了在`f`中申明的变量`a`。
+在上面的例子里，`g`捕获到了在`f`中声明的变量`a`。
 无论`g`何时被调用，`a`的值将会和`f`中`a`的值绑定。
 甚至在`f`完成运行后再去调用`g`，它仍将能够访问和修改`a`。
 
@@ -78,7 +78,7 @@ f(); // returns 2
 
 `var` declarations have some odd scoping rules for those used to other languages.
 Take the following example:
-`var`申明方式和其他语言相比有一些奇特的作用域规则。
+`var`声明方式和其他语言相比有一些奇特的作用域规则。
 请看下面的例子：
 
 ```ts
@@ -100,15 +100,15 @@ That's because `var` declarations are accessible anywhere within their containin
 Some people call this *`var`-scoping* or *function-scoping*.
 Parameters are also function scoped.
 一些读者可能会在这个例子上楞了一下。
-变量`x`是*在`if`块里*申明的，但是我们可以在块的外部访问它。
-那是因为`var`申明方式是可以在包含它们的函数、模块、命名空间或者全局作用域里任意访问的——这些我们会在之后介绍，而不是包含它的块。
+变量`x`是*在`if`块里*声明的，但是我们可以在块的外部访问它。
+那是因为`var`声明方式是可以在包含它们的函数、模块、命名空间或者全局作用域里任意访问的——这些我们会在之后介绍，而不是包含它的块。
 一些人将其称为*`var`作用域*或*函数作用域*。
 函数参数也同样满足函数作用域。
 
 These scoping rules can cause several types of mistakes.
 One problem they exacerbate is the fact that it is not an error to declare the same variable multiple times:
 这些作用域规则可能会引起一些错误。
-这会加剧的一个问题是虽然不是错误但是重复的申明同一个变量。
+这会加剧的一个问题是虽然不是错误但是重复的声明同一个变量。
 
 ```ts
 function sumMatrix(matrix: number[][]) {
@@ -187,8 +187,13 @@ Let's take a minute to consider that in this context.
 `setTimeout` will run a function after some number of milliseconds, and also after the `for` loop has stopped executing.
 By the time the `for` loop has stopped executing, the value of `i` is `10`.
 So each time the given function gets called, it will print out `10`!
+让我们来考虑下现状。
+`setTimeout`会在经过一定毫秒数后运行一个函数，而这是在`for`循环停止运行后发生的。
+在`for`循环停止的时候，`i`的值将会变为`10`。
+所以在每次调用给定函数的时候，它都将打印出`10`！
 
 A common work around is to use an IIFE - an Immediately Invoked Function Expression - to capture `i` at each iteration:
+一个常见的解决办法是使用IIFE——立即调用函数表达式（Immediately Invoked Function Expression），用来在每次迭代中捕获`i`：
 
 ```ts
 for (var i = 0; i < 10; i++) {
@@ -202,22 +207,29 @@ for (var i = 0; i < 10; i++) {
 
 This odd-looking pattern is actually a commonplace.
 The `i` in the parameter actually shadows the `i` declared in the `for` loop, but since we named it the same, we didn't have to modify the loop body too much.
+这种看上去古怪的模式实际上是十分常见的。
+参数中的`i`实际上遮蔽了`for`循环中声明的变量`i`，我们将它们命名成一样的是因为这样就不用对循环体做太多的修改。
 
-# `let` declarations
+# `let`声明方式
 
 By now you've figured out that `var` has some problems, which is precisely why `let` statements are a new way to declare variables.
 Apart from the keyword used, `let` statements are written the same way `var` statements are.
+你现在应该能知道使用`var`存在一些问题，而这些问题恰恰是`let`语句成为声明变量的一种新方式的原因。
+除了使用的关键字不同，`let`语句和`var`语句使用同样的书写方式。
 
 ```ts
 let hello = "Hello!";
 ```
 
 The key difference is not in the syntax, but in the semantics, which we'll now dive into.
+两者的区别不在于语法上，而是在于语义上，我们接下去会对此进行深入。
 
-## Block-scoping
+## 块作用域
 
 When a variable is declared using `let`, it uses what some call *lexical-scoping* or *block-scoping*.
 Unlike variables declared with `var` whose scopes leak out to their containing function, block-scoped variables are not visible outside of their nearest containing block or `for`-loop.
+当使用`let`声明了一个变量，它的用法被一些人称为*词法作用域*或*块作用域*。
+使用`var`声明的变量会将其作用域泄漏到所在的函数，不同与此，块作用域的变量在包含它最近的块或`for`循环外不可见。
 
 ```ts
 function f(input: boolean) {
@@ -236,8 +248,11 @@ function f(input: boolean) {
 
 Here, we have two local variables `a` and `b`.
 `a`'s scope is limited to the body of `f` while `b`'s scope is limited to the containing `if` statement's block.
+在这里我们声明了两个局部变量`a`和`b`。
+`a`的作用域被限定在`f`的范围内而`b`的作用域被限定在`if`语句块的范围内。
 
 Variables declared in a `catch` clause also have similar scoping rules.
+在`catch`语句范围内的变量声明也有相似的作用域规则。
 
 ```ts
 try {
@@ -254,6 +269,9 @@ console.log(e);
 Another property of block-scoped variables is that they can't be read or written to before they're actually declared.
 While these variables are "present" throughout their scope, all points up until their declaration are part of their *temporal dead zone*.
 This is just a sophisticated way of saying you can't access them before the `let` statement, and luckily TypeScript will let you know that.
+块作用域变量的另一个属性是它们不能在被实际声明前进行读写操作。
+虽然这些变量“现在”遍布于它们的作用域，但是直到它们的声明部分位置都是他们的*暂时性死区*。
+这仅仅是一种复杂的方式来说明你在`let`语句之前不能访问它们，然后幸运的是TypeScript会让你知道这点。
 
 ```ts
 a++; // illegal to use 'a' before it's declared;
@@ -263,6 +281,9 @@ let a;
 Something to note is that you can still *capture* a block-scoped variable before it's declared.
 The only catch is that it's illegal to call that function before the declaration.
 If targeting ES2015, a modern runtime will throw an error; however, right now TypeScript is permissive and won't report this as an error.
+需要注意的是你依然可以在声明前*捕获*一个快作用域的变量。
+唯一美中不足的是在声明前调用那个函数是非法的。
+如果针对ES2015，一个现代化的运行时会抛出一个错误；无论如何，现在TypeScript现在是允许这样做的，且不会将其报告为错误。
 
 ```ts
 function foo() {
@@ -278,10 +299,12 @@ let a;
 ```
 
 For more information on temporal dead zones, see relevant content on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let).
+获取更多关于暂时性死区的信息，请访问相关链接：[Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let).
 
-## Re-declarations and Shadowing
+## 重声明和遮蔽
 
 With `var` declarations, we mentioned that it didn't matter how many times you declared your variables; you just got one.
+在使用`var`声明方式是，我们会注意到对于某个变量无论声明，你会得到只有一个变量。
 
 ```ts
 function f(x) {
@@ -297,6 +320,9 @@ function f(x) {
 In the above example, all declarations of `x` actually refer to the *same* `x`, and this is perfectly valid.
 This often ends up being a source of bugs.
 Thankfully, `let` declarations are not as forgiving.
+在上面的例子里，所有对`x`的声明实际上指向了*同一个*`x`，而且它是完全有效的。
+这往往会成为bug的一个来源。
+值得庆幸的是，`let`声明方式并不会如此宽松。
 
 ```ts
 let x = 10;
@@ -304,6 +330,7 @@ let x = 20; // error: can't re-declare 'x' in the same scope
 ```
 
 The variables don't necessarily need to both be block-scoped for TypeScript to tell us that there's a problem.
+变量在TypeScript中并不需要同时作为块作用域来告诉我们这里有个问题。
 
 ```ts
 function f(x) {
@@ -318,6 +345,8 @@ function g() {
 
 That's not to say that block-scoped variable can never be declared with a function-scoped variable.
 The block-scoped variable just needs to be declared within a distinctly different block.
+但这并不是说块作用域变量永远不能作为函数作用域变量被声明。
+块作用域变量仅仅是需要在确实不同的块中被声明。
 
 ```ts
 function f(condition, x) {
@@ -336,6 +365,9 @@ f(true, 0);  // returns 100
 The act of introducing a new name in a more nested scope is called *shadowing*.
 It is a bit of a double-edged sword in that it can introduce certain bugs on its own in the event of accidental shadowing, while also preventing certain bugs.
 For instance, imagine we had written our earlier `sumMatrix` function using `let` variables.
+在多层嵌套作用域中引入一个新的的名称的行为被称为*遮蔽*。
+这稍微有点双刃剑的效果因为它会在偶发的遮蔽事件中引入一些Bug，同样也会阻止某些Bug的发生。
+例如，想象一下使用`let`来书写我们之前写过的`sumMatrix`函数。
 
 ```ts
 function sumMatrix(matrix: number[][]) {
@@ -352,9 +384,12 @@ function sumMatrix(matrix: number[][]) {
 ```
 
 This version of the loop will actually perform the summation correctly because the inner loop's `i` shadows `i` from the outer loop.
+这个版本的循环将会正确的执行求和因为内循环的`i`遮蔽了外循环的`i`。
 
 Shadowing should *usually* be avoided in the interest of write clearer code.
 While there are some scenarios where it may be fitting to take advantage of it, you should use your best judgement.
+如果致力于书写更为清晰的代码，则应*尽量*避免使用遮蔽。
+如果存在某些场景需要用到遮蔽的优点，你应当使用你的最佳判断。
 
 ## Block-scoped variable capturing
 

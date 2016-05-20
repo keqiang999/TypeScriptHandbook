@@ -185,7 +185,7 @@ function warnUser(): void {
 }
 ```
 
-申明类型为`void`变量并不实用，因为你仅能为它们附上`undefined`值或`null`值： 
+声明类型为`void`变量并不实用，因为你仅能为它们附上`undefined`值或`null`值： 
 
 ```ts
 let unusable: void = undefined;
