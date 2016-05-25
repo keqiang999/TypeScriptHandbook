@@ -392,10 +392,14 @@ While there are some scenarios where it may be fitting to take advantage of it, 
 如果存在某些场景需要用到遮蔽的优点，你应当使用你的最佳判断。
 
 ## Block-scoped variable capturing
+## 捕获块作用域的变量
 
 When we first touched on the idea of variable capturing with `var` declaration, we briefly went into how variables act once captured.
 To give a better intuition of this, each time a scope is run, it creates an "environment" of variables.
 That environment and its captured variables can exist even after everything within its scope has finished executing.
+当我们通过`var`声明方式第一次接触变量捕获的时候，我们简要地了解了一下当变量被捕获后是如何运作的。
+更直观的说法是，在每次运行一个作用域的时候，它都会创建一个变量的“环境”。
+这个环境和它捕获的变量甚至在其所在的作用域全部结束运行后依然可以存在。
 
 ```ts
 function theCityThatAlwaysSleeps() {
@@ -413,14 +417,21 @@ function theCityThatAlwaysSleeps() {
 ```
 
 Because we've captured `city` from within its environment, we're still able to access it despite the fact that the `if` block finished executing.
+因为我们在`city`所在的环境中捕获了它，因此尽管`if`块已经结束运行，我们依然可以访问到它。
 
 Recall that with our earlier `setTimeout` example, we ended up needing to use an IIFE to capture the state of a variable for every iteration of the `for` loop.
 In effect, what we were doing was creating a new variable environment for our captured variables.
 That was a bit of a pain, but luckily, you'll never have to do that again in TypeScript.
+回顾我们之前的`setTimeout`例子，我们最终需要使用IIFE来捕获`for`循环每个嵌套中变量的状态。
+事实上，我们所做的事情是为我们捕获的变量创建了一个新的变量环境。
+这样子做会有点痛，但是幸运的是，你并不必在TypeScript中做同样的事情。
 
 `let` declarations have drastically different behavior when declared as part of a loop.
 Rather than just introducing a new environment to the loop itself, these declarations sort of create a new scope *per iteration*.
 Since this is what we were doing anyway with our IIFE, we can change our old `setTimeout` example to just use a `let` declaration.
+`let`声明方式在作为一个循环中的一部分使用的时候，其行为存在巨大的不同。
+不同于仅仅为循环本身引入一个新的环境，这些声明方式为*每一次迭代*都创建了一个新的作用域。
+因为这正是我们通过IIFE所做的事情，因此我们可以将老的`setTimeout`例子通过`let`声明方式进行改写。
 
 ```ts
 for (let i = 0; i < 10 ; i++) {
@@ -429,6 +440,7 @@ for (let i = 0; i < 10 ; i++) {
 ```
 
 and as expected, this will print out
+并且正如预期的，将打印出如下内容。
 
 ```text
 0
@@ -444,8 +456,10 @@ and as expected, this will print out
 ```
 
 # `const` declarations
+# `const`声明方式
 
 `const` declarations are another way of declaring variables.
+`const`声明方式是另一种声明变量的方式。
 
 ```ts
 const numLivesForCat = 9;
@@ -453,8 +467,11 @@ const numLivesForCat = 9;
 
 They are like `let` declarations but, as their name implies, their value cannot be changed once they are bound.
 In other words, they have the same scoping rules as `let`, but you can't re-assign to them.
+它们和`let`声明相似，不同点在于变量值一但被绑定后将不再能够修改，正如其名字所暗示的。
+换言之，它们和`let`有相同的作用域规则，但你不能对它们重新赋值。
 
 This should not be confused with the idea that the values they refer to are *immutable*.
+这不应和它所指向的值是*永恒不变*的想法互相混淆。
 
 ```ts
 const numLivesForCat = 9;
@@ -477,6 +494,7 @@ kitty.numLives--;
 ```
 
 Unless you take specific measures to avoid it, the internal state of a `const` variable is still modifiable.
+除非你采取具体手段来进行避免，一个`const`变量的内部状态依然是可修改的。
 
 # `let` vs. `const`
 
