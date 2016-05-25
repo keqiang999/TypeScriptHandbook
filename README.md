@@ -16,7 +16,7 @@ TypeScript官方手册个人汉化
 * Classes
 * Functions
 * Generics
-* Enums
+* [枚举](07_Enums.md)
 * Type Inference
 * Type Compatibility
 * Advanced Types
