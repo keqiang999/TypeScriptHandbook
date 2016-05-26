@@ -500,15 +500,23 @@ Unless you take specific measures to avoid it, the internal state of a `const` v
 
 Given that we have two types of declarations with similar scoping semantics, it's natural to find ourselves asking which one to use.
 Like most broad questions, the answer is: it depends.
+现在我们有两种作用域语义相似的两种声明方式，那自然会产生哪个更好用的疑问。
+和大多数广泛的问题一样，答案是：基于需求。
 
 Applying the [principle of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege), all declarations other than those you plan to modify should use `const`.
 The rationale is that if a variable didn't need to get written to, others working on the same codebase shouldn't automatically be able to write to the object, and will need to consider whether they really need to reassign to the variable.
 Using `const` also makes code more predictable when reasoning about flow of data.
+根据[最小特权原则](https://en.wikipedia.org/wiki/Principle_of_least_privilege)，所有的声明，除了你准备修改其值的以外，都应当使用`const`。
+这个理论的基础是如果一个变量并不需要去写入，那其他基于相同代码作业的人不应该自动获得去写入这个对象的能力，并需要去考虑是否需要真的要对该变量赋值。
+使用`const`还能在分析数据流的时候让代码更为可预测。
 
 On the other hand, `let` is not any longer to write out than `var`, and many users will prefer its brevity.
 The majority of this handbook uses `let` declarations in that interest.
+另一方面，使用`let`并不会比`var`写更多东西，这会让使用者感到便利。
+基于这种兴趣，本手册的大部分内容使用了`let`声明方式。
 
 Use your best judgement, and if applicable, consult the matter with the rest of your team.
+使用你最佳的判断，然后如果可以的话，请和你团队的其它成员进行沟通。
 
 # Destructuring
 
