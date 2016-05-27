@@ -11,7 +11,7 @@ TypeScript官方手册个人汉化
 
 # 目录
 1. [基本类型](01_Basic_Types.md)
-* Variable Declarations
+* [变量声明](02_Variable_Declarations.md)
 * Interfaces
 * Classes
 * Functions
