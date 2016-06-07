@@ -26,7 +26,7 @@ function identity(arg: any): any {
 
 虽然使用`any`可以接受任意或者`arg`中的全部类型，但事实上，当函数返回时，我们不知道原始数据是什么类型的。如果我们传递一个数字类型给函数，函数只会返回一个any类型。
 
-Instead, we need a way of capturing the type of the argument in such a way that we can also use it to denote what is being returned.Here, we will use a *type variable*, a special kind of variable that works on types rather than values.
+因此，我们需要一种既可以捕获数据类型又可以表示返回值的方法。在这里，我们使用的是*类型变量*一种特殊的，可以作用在类型上的变量。
 
 ```ts
 function identity<T>(arg: T): T {
@@ -34,38 +34,38 @@ function identity<T>(arg: T): T {
 }
 ```
 
-We've now added a type variable `T` to the identity function.
-This `T` allows us to capture the type the user provides (e.g. `number`), so that we can use that information later.
-Here, we use `T` again as the return type. On inspection, we can now see the same type is used for the argument and the return type.
-This allows us to traffic that type information in one side of the function and out the other.
+我们现在给身份函数添加了一个`T`变量。
+这个`T`可以让我们捕获用户提供的变量类型（比如`number`），然后我们就在稍后使用这个获得的变量类型。
+在这里，我们使用`T`作为返回类型。回顾一下，我们现在可以看到变量和返回类型用的是同样的类型。
+这让我们可以监控数据从进入到走出函数时的类型信息。
 
-We say that this version of the `identity` function is generic, as it works over a range of types.
-Unlike using `any`, it's also just as precise (ie, it doesn't lose any information) as the first `identity` function that used numbers for the argument and return type.
+让我们把这个版本的`identity`函数定义为一个泛型，因为它可以在多种类型中正常运作。
+不同于使用`any`类型，这次的`identity`函数就和第一次的函数一样准确（也就是说，它不会丢失任何信息），因为它使用了数字类型作为变量和返回值的类型。
 
-Once we've written the generic identity function, we can call it in one of two ways.
-The first way is to pass all of the arguments, including the type argument, to the function:
+当我们完成了身份函数的泛型之后，我们可以通过两种方式来调用它。
+第一种方式是传递所有的变量，包括类型变量给函数：
 
 ```ts
-let output = identity<string>("myString");  // type of output will be 'string'
+let output = identity<string>("myString");  //  type of output will be 'string'
 ```
 
-Here we explicitly set `T` to be string as one of the arguments to the function call, denoted using the `<>` around the arguments rather than `()`.
+在这里我们明确地设置了`T`在被函数调用时变量的类型需要是string，使用`<>`而不是`()`标记在变量的周围。
 
-The second way is also perhaps the most common. Here we use *type argument inference*, that is, we want the compiler to set the value of `T` for us automatically based on the type of the argument we pass in:
+The second way is also perhaps the most common. Here we use *type argument inference*, that is, we want the compiler to set the value of `T` for us automatically based on the type of the argument we pass in:第二种方式可能也是最常用的方式。在这里我们使用*变量类型推断*，也就是说，我们想要编译器根据我们传入的变量类型自动为`T`赋值。
 
 ```ts
 let output = identity("myString");  // type of output will be 'string'
 ```
 
-Notice that we didn't have to explicitly pass the type in the angle brackets (`<>`), the compiler just looked at the value `"myString"`, and set `T` to its type.
-While type argument inference can be a helpful tool to keep code shorter and more readable, you may need to explicitly pass in the type arguments as we did in the previous example when the compiler fails to infer the type, as may happen in more complex examples.
+请注意我们并不一定要明确的用尖括号(`<>`)来传递类型，编译器只会查找`"myString"`的值，然后给这个值设置一个`T`类型。
+虽然变量类型推断是一个可以让代码变得尽可能短而且易读的实用工具，在编译器不能推断类型的时候，比如一些更复杂的例子中，你可能还是要像第一个例子那样明确地传递变量类型。
 
-# Working with Generic Type Variables
+# 使用泛型类的变量
 
-When you begin to use generics, you'll notice that when you create generic functions like `identity`, the compiler will enforce that you use any generically typed parameters in the body of the function correctly.
-That is, that you actually treat these parameters as if they could be any and all types.
+在你刚开始使用泛型的时候，你会发现当你创建了一个类似`identity`函数的泛型时，编译器会强制你在函数体中正确使用任意的一般类型参数。
+也就是说，你需要考虑到这些参数可以是任意一种类型。
 
-Let's take our `identity` function from earlier:
+让我们重新回顾一下之前的`identity`函数：
 
 ```ts
 function identity<T>(arg: T): T {
@@ -73,8 +73,8 @@ function identity<T>(arg: T): T {
 }
 ```
 
-What if we want to also log the length of the argument `arg` to the console with each call?
-We might be tempted to write this:
+那么如果我们想要在每次调用的时候在控制器上记录变量`arg`的长度呢？
+我们可能想这么写：
 
 ```ts
 function loggingIdentity<T>(arg: T): T {
@@ -83,11 +83,11 @@ function loggingIdentity<T>(arg: T): T {
 }
 ```
 
-When we do, the compiler will give us an error that we're using the `.length` member of `arg`, but nowhere have we said that `arg` has this member.
-Remember, we said earlier that these type variables stand in for any and all types, so someone using this function could have passed in a `number` instead, which does not have a `.length` member.
+当我们这么做的时候，编译器会返回一个错误，我们使用的是`arg`的成员`.length`，但是我们没有申明过`arg`拥有这个成员。
+请记住，我们之前说过这类变量可以是任何类型，所以想要实现这个功能只需要传递一个`number`，虽然它并没有`.length`成员。
 
-Let's say that we've actually intended this function to work on arrays of `T` rather than `T` directly. Since we're working with arrays, the `.length` member should be available.
-We can describe this just like we would create arrays of other types:
+假设我们成功地让这个功能在`T`数组而不是`T`函数上实现了。因为我们在和数组打交道，所以`.length`成员现在是可用的。
+我们可以像创建一个其他类型的数组一样来描述它：
 
 ```ts
 function loggingIdentity<T>(arg: T[]): T[] {
@@ -96,11 +96,11 @@ function loggingIdentity<T>(arg: T[]): T[] {
 }
 ```
 
-You can read the type of `loggingIdentity` as "the generic function `loggingIdentity` takes a type parameter `T`, and an argument `arg` which is an array of `T`s, and returns an array of `T`s."
-If we passed in an array of numbers, we'd get an array of numbers back out, as `T` would bind to `number`.
-This allows us to use our generic type variable `T` as part of the types we're working with, rather than the whole type, giving us greater flexibility.
+你可以看到`loggingIdentity`类是“泛型函数`loggingIdentity` 有一个类型变量`T`，还有一个作为数组`T`存在的变量`arg`，最后返回数组`T`”。
+如果我们传入一组数字，我们会得到一组数字作为返回，因为`T`是绑定为`number`类型的。
+这允许我们使用自己的泛型类变量`T`作为我们正在使用的类型中的一部分，而非整个类型，这么做会带来更好的灵活性。
 
-We can alternatively write the sample example this way:
+我们也可以把示例用这种方法来实现：
 
 ```ts
 function loggingIdentity<T>(arg: Array<T>): Array<T> {
@@ -109,8 +109,8 @@ function loggingIdentity<T>(arg: Array<T>): Array<T> {
 }
 ```
 
-You may already be familiar with this style of type from other languages.
-In the next section, we'll cover how you can create your own generic types like `Array<T>`.
+你可能已经对其他语言中的这类类型形式相当熟悉。
+在下一章节，我们会告诉你如何创建类似`Array<T>`这样的自己定义的泛型。
 
 # Generic Types
 
