@@ -159,7 +159,7 @@ However, TypeScript takes the stance that there's probably a bug in this code.
 Object literals get special treatment and undergo *excess property checking* when assigning them to other variables, or passing them as arguments.
 If an object literal has any properties that the "target type" doesn't have, you'll get an error.
 然而，在这种情况下TypeScript会认为代码中可能存在一个bug。
-对象文本会被特殊对待并在赋值给其他变量或作为参数传递时会经历*额外的属性检查*。
+对象文本会被特殊对待并在赋值给其他变量或作为参数传递时会经历*过剩属性检查*。
 如果一个对象文本有一个“目标类型”不包含的属性，将会报出一个错误。
 
 ```ts
@@ -194,7 +194,8 @@ We'll discuss index signatures in a bit, but here we're saying a `SquareConfig` 
 
 One final way to get around these checks, which might be a bit surprising, is to assign the object to another variable:
 Since `squareOptions` won't undergo excess property checks, the compiler won't give you an error.
-
+可能会有点令人惊讶，处理这类检查的最终手段是将对象赋值给另一变量：
+因为`squareOptions`并不接受过剩属性检查，编译器将不会报错。
 
 ```ts
 let squareOptions = { colour: "red", width: 100 };
@@ -205,6 +206,10 @@ Keep in mind that for simple code like above, you probably shouldn't be trying t
 For more complex object literals that have methods and hold state, you might need to keep these techniques in mind, but a majority of excess property errors are actually bugs.
 That means if you're running into excess property checking problems for something like option bags, you might need to revise some of your type declarations.
 In this instance, if it's okay to pass an object with both a `color` or `colour` property to `createSquare`, you should fix up the definition of `SquareConfig` to reflect that.
+请牢记在上面这种简单的代码中，你可能不必去尝试“绕过”这些检查。
+对于更复杂的，包含方法并保存状态的对象文本，你可能需要牢记这些技术，但是大多数过剩属性错误实际上是Bug。
+这意味着如果你在使用选项包之类的东西时碰到了过剩属性检查的问题，你可能需要对你的类型声明做部分修改。
+在这个示例中，如果允许向`createSquare`传入一个同时包含`color`或`colour`属性的对象，你应该修正`SquareConfig`的定义来做反映。
 
 # Function Types
 
