@@ -112,12 +112,11 @@ function loggingIdentity<T>(arg: Array<T>): Array<T> {
 你可能已经对其他语言中的这类类型形式相当熟悉。
 在下一章节，我们会告诉你如何创建类似`Array<T>`这样的自己定义的泛型。
 
-# Generic Types
 
-In previous sections, we created generic identity functions that worked over a range of types.
-In this section, we'll explore the type of the functions themselves and how to create generic interfaces.
+在之前的章节中，我们创建了可以在大量类型中使用的泛型身份函数。
+在本章中，我们会探索类型函数并且知道如何创建泛型接口。
 
-The type of generic functions is just like those of non-generic functions, with the type parameters listed first, similarly to function declarations:
+泛型函数的类型就和这些非泛型函数一样，把类型变量列在最前面，和函数定义相似：
 
 ```ts
 function identity<T>(arg: T): T {
@@ -127,7 +126,7 @@ function identity<T>(arg: T): T {
 let myIdentity: <T>(arg: T) => T = identity;
 ```
 
-We could also have used a different name for the generic type parameter in the type, so long as the number of type variables and how the type variables are used line up.
+我们也可以在类型中对泛型类变量进行不同的命名，只要类型变量的数目和最终的使用是一一对应的。
 
 ```ts
 function identity<T>(arg: T): T {
@@ -137,7 +136,7 @@ function identity<T>(arg: T): T {
 let myIdentity: <U>(arg: U) => U = identity;
 ```
 
-We can also write the generic type as a call signature of an object literal type:
+We can also write the generic type as a call signature of an object literal type:我们也可以把泛型类作为一个对象文本类型的调用签名：
 
 ```ts
 function identity<T>(arg: T): T {
@@ -147,8 +146,8 @@ function identity<T>(arg: T): T {
 let myIdentity: {<T>(arg: T): T} = identity;
 ```
 
-Which leads us to writing our first generic interface.
-Let's take the object literal from the previous example and move it to an interface:
+这样我们就可以写第一个泛型接口了。
+让我们把上一个例子的对象文本放到一个接口中：
 
 ```ts
 interface GenericIdentityFn {
@@ -162,9 +161,9 @@ function identity<T>(arg: T): T {
 let myIdentity: GenericIdentityFn = identity;
 ```
 
-In a similar example, we may want to move the generic parameter to be a parameter of the whole interface.
-This lets us see what type(s) we're generic over (e.g. `Dictionary<string>` rather than just `Dictionary`).
-This makes the type parameter visible to all the other members of the interface.
+在一个类似的例子中，我们可能想要把泛型变量变成整个接口的变量。
+这样我们就能看到我们泛型了什么类型（例如：`Dictionary<string>`而不是`Dictionary`）。
+在这种接口中，类型变量对其他成员都是可见的。
 
 ```ts
 interface GenericIdentityFn<T> {
@@ -178,13 +177,13 @@ function identity<T>(arg: T): T {
 let myIdentity: GenericIdentityFn<number> = identity;
 ```
 
-Notice that our example has changed to be something slightly different.
-Instead of describing a generic function, we now have a non-generic function signature that is a part of a generic type.
-When we use `GenericIdentityFn`, we now will also need to specify the corresponding type argument (here: `number`), effectively locking in what the underlying call signature will use.
-Understanding when to put the type parameter directly on the call signature and when to put it on the interface itself will be helpful in describing what aspects of a type are generic.
+请注意我们的例子有了一些微小的变化。
+Instead of describing a generic function, we now have a non-generic function signature that is a part of a generic type.与其描述整个泛型函数，我们现在拥有一个非泛型函数签名，而它是一个泛型类的一部分。
+当我们使用`GenericIdentityFn`的时候，我们也需要确定对应变量的类型（在这里是`number`），有效地确定底层的调用签名会使用什么类型。
+Understanding when to put the type parameter directly on the call signature and when to put it on the interface itself will be helpful in describing what aspects of a type are generic.正确理解何时该把调用签名直接放在类型变量上还是放在接口本身对于描述泛型部分的类型的非常有用的。
 
-In addition to generic interfaces, we can also create generic classes.
-Note that it is not possible to create generic enums and namespaces.
+除了泛型接口，我们还可以创建泛型类。
+请注意泛型枚举和泛型命名空间是不可创建的。
 
 # Generic Classes
 
