@@ -112,6 +112,7 @@ function loggingIdentity<T>(arg: Array<T>): Array<T> {
 你可能已经对其他语言中的这类类型形式相当熟悉。
 在下一章节，我们会告诉你如何创建类似`Array<T>`这样的自己定义的泛型。
 
+# 泛型类型
 
 在之前的章节中，我们创建了可以在大量类型中使用的泛型身份函数。
 在本章中，我们会探索类型函数并且知道如何创建泛型接口。
@@ -185,10 +186,10 @@ Understanding when to put the type parameter directly on the call signature and 
 除了泛型接口，我们还可以创建泛型类。
 请注意泛型枚举和泛型命名空间是不可创建的。
 
-# Generic Classes
+# 泛型类
 
-A generic class has a similar shape to a generic interface.
-Generic classes have a generic type parameter list in angle brackets (`<>`) following the name of the class.
+泛型类的结构和泛型接口是类似的。
+泛型类的变量是跟在类名之后的尖括号 (`<>`) 里的。
 
 ```ts
 class GenericNumber<T> {
@@ -201,8 +202,8 @@ myGenericNumber.zeroValue = 0;
 myGenericNumber.add = function(x, y) { return x + y; };
 ```
 
-This is a pretty literal use of the `GenericNumber` class, but you may have noticed that nothing is restricting it to only use the `number` type.
-We could have instead used `string` or even more complex objects.
+在`GenericNumber`类中有一种相当文字化的使用方法，但是你你能也注意到了在使用`number`类的时候并没有任何限制。
+我们甚至可以使用`string`或者更加复杂的对象。
 
 ```ts
 let stringNumeric = new GenericNumber<string>();
@@ -212,15 +213,15 @@ stringNumeric.add = function(x, y) { return x + y; };
 alert(stringNumeric.add(stringNumeric.zeroValue, "test"));
 ```
 
-Just as with interface, putting the type parameter on the class itself lets us make sure all of the properties of the class are working with the same type.
+和接口一样，把类型变量直接传入类本身可以保证类的所有属性都有相同的类型。
 
-As we covered in [our section on classes](./Classes.md), a class has two sides to its type: the static side and the instance side.
-Generic classes are only generic over their instance side rather than their static side, so when working with classes, static members can not use the class's type parameter.
+As we covered in [our section on classes](./Classes.md), a class has two sides to its type: the static side and the instance side.就像我们在[our section on classes](./Classes.md)中说过的那样，一个类有两种类型：静态类型和实例类型。
+Generic classes are only generic over their instance side rather than their static side, so when working with classes, static members can not use the class's type parameter.泛型类只是在实例类型而非静态类型中使用泛型，所以在使用泛型类的时候，静态成员可以不使用类的类型变量。
 
-# Generic Constraints
+# 泛型约束
 
-If you remember from an earlier example, you may sometimes want to write a generic function that works on a set of types where you have some knowledge about what capabilities that set of types will have.
-In our `loggingIdentity` example, we wanted to be able access the `.length` property of `arg`, but the compiler could not prove that every type had a `.length` property, so it warns us that we can't make this assumption.
+If you remember from an earlier example, you may sometimes want to write a generic function that works on a set of types where you have some knowledge about what capabilities that set of types will have.如果你还记得早前的例子，你也许会想到去写一个可以在某些类型中作用的泛型函数，而这个函数在具体类型中的功能是你所知道的。
+在我们`loggingIdentity`的例子中，我们希望可以获得`arg`的`.length`属性，但是编译器不能证明每种类型都有`.length`属性，所以它警告我们不能这么组装。
 
 ```ts
 function loggingIdentity<T>(arg: T): T {
@@ -229,12 +230,12 @@ function loggingIdentity<T>(arg: T): T {
 }
 ```
 
-Instead of working with any and all types, we'd like to constrain this function to work with any and all types that also have the `.length` property.
-As long as the type has this member, we'll allow it, but it's required to have at least this member.
-To do so, we must list our requirement as a constraint on what T can be.
+除了在所有类型中可用，我们希望这个函数的约束也可以作用在所有拥有`.length`属性的类型中。
+只要某一类型拥有这个成员，我们就可以使用，但这个类型至少要拥有这个成员。
+为了达到这个目的，我们需要把希望T可以做到的事情列出并做成一个约束。
 
-To do so, we'll create an interface that describes our constraint.
-Here, we'll create an interface that has a single `.length` property and then we'll use this interface and the `extends` keyword to denote our constraint:
+所以，我们要创建一个接口来描述这个约束。
+在这里，我们会创建一个只拥有`.length`属性的接口，然后我们会用这个接口和关键字`extends`来表示我们的约束：
 
 ```ts
 interface Lengthwise {
@@ -247,23 +248,23 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 }
 ```
 
-Because the generic function is now constrained, it will no longer work over any and all types:
+因为泛型函数现在被约束了，它不再能作用于任意类型：
 
 ```ts
 loggingIdentity(3);  // Error, number doesn't have a .length property
 ```
 
-Instead, we need to pass in values whose type has all the required properties:
+Instead, we need to pass in values whose type has all the required properties:因此，我们需要通过传递值的方式来表示我们需要的类型的属性：
 
 ```ts
 loggingIdentity({length: 10, value: 3});
 ```
 
-## Using Type Parameters in Generic Constraints
+## 在泛型约束中使用类型变量
 
-You can declare a type parameter that is constrained by another type parameter.
-For example, here we'd like to take two objects and copy properties from one to the other.
-We'd like to ensure that we're not accidentally writing any extra properties from our `source`, so we'll place a constraint between the two types:
+.你可以声明一个被其他类型变量限制的类型变量。
+比如，这里我们有两个对象，我们需要把属性从一个对象传递给另一个。
+我们希望确保不会从`source`中意外地写入任何额外的属性，所以我们在两个类型中放置了一个约束：
 
 ```ts
 function copyFields<T extends U, U>(target: T, source: U): T {
@@ -279,9 +280,9 @@ copyFields(x, { b: 10, d: 20 }); // okay
 copyFields(x, { Q: 90 });  // error: property 'Q' isn't declared in 'x'.
 ```
 
-## Using Class Types in Generics
+## 在泛型中使用类类型
 
-When creating factories in TypeScript using generics, it is necessary to refer to class types by their constructor functions. For example,
+When creating factories in TypeScript using generics, it is necessary to refer to class types by their constructor functions. For example,当我们在TypeScript中使用泛型创建factories的时候，必须要参考对应的构造函数的类类型。比如，
 
 ```ts
 function create<T>(c: {new(): T; }): T {
@@ -289,7 +290,7 @@ function create<T>(c: {new(): T; }): T {
 }
 ```
 
-A more advanced example uses the prototype property to infer and constrain relationships between the constructor function and the instance side of class types.
+A more advanced example uses the prototype property to infer and constrain relationships between the constructor function and the instance side of class types.这是一个更高级的的，使用原始属性来推断和约束构造函数和实例类型之间的类类型的例子。
 
 ```ts
 class BeeKeeper {
