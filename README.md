@@ -15,7 +15,7 @@ TypeScript官方手册个人汉化
 * Interfaces
 * Classes
 * Functions
-* Generics
+* [泛型](06_Generics.md)
 * [枚举](07_Enums.md)
 * Type Inference
 * Type Compatibility
@@ -32,3 +32,7 @@ TypeScript官方手册个人汉化
 * Decorators
 * Mixins
 * Triple-Slash Directives
+
+# 协力者
+@Nidhoggur1993 : 06
+@huajie1988 : 07
