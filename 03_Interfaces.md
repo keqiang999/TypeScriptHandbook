@@ -212,12 +212,17 @@ In this instance, if it's okay to pass an object with both a `color` or `colour`
 在这个示例中，如果允许向`createSquare`传入一个同时包含`color`或`colour`属性的对象，你应该修正`SquareConfig`的定义来做反映。
 
 # Function Types
+# 函数类型
 
 Interfaces are capable of describing the wide range of shapes that JavaScript objects can take.
 In addition to describing an object with properties, interfaces are also capable of describing function types.
+接口是拥有描述JavaScript对象可以有多大范围的形的能力。
+除了可以用属性描述一个对象，接口还能够描述函数类型。
 
 To describe a function type with an interface, we give the interface a call signature.
 This is like a function declaration with only the parameter list and return type given. Each parameter in the parameter list requires both name and type.
+为了用接口描述一个函数类型，我们给了该接口一个调用签名。
+这就像一个只有参数列表和返回类型的函数声明。在参数列表中的每个参数都需要参数名和类型。
 
 ```ts
 interface SearchFunc {
@@ -227,6 +232,8 @@ interface SearchFunc {
 
 Once defined, we can use this function type interface like we would other interfaces.
 Here, we show how you can create a variable of a function type and assign it a function value of the same type.
+一旦定义，我们可以像使用其他接口一样使用这个函数类型接口。
+在这里，我们将展示如何创建一个函数类型的变量，并赋予一个同类型的函数值。
 
 ```ts
 let mySearch: SearchFunc;
@@ -243,6 +250,8 @@ mySearch = function(source: string, subString: string) {
 
 For function types to correctly type-check, the names of the parameters do not need to match.
 We could have, for example, written the above example like this:
+用于正确的类型检查的函数类型，其参数名称不需要进行匹配。
+我们以如下代码为例：
 
 ```ts
 let mySearch: SearchFunc;
@@ -261,6 +270,10 @@ Function parameters are checked one at a time, with the type in each correspondi
 If you do not want to specify types at all, Typescript's contextual typing can infer the argument types since the function value is assigned directly to a variable of type `SearchFunc`.
 Here, also, the return type of our function expression is implied by the values it returns (here `false` and `true`).
 Had the function expression returned numbers or strings, the type-checker would have warned us that return type doesn't match the return type described in the `SearchFunc` interface.
+函数参数一次只检查一个，通过对应参数的位置来一个个做类型检查。
+如果你完全不想指定类型，Typescript的上下文类型可以在函数值直接赋给`SearchFunc`类型的变量时推断参数的类型。
+在这里，同样的，我们的函数表达式的返回类型是由它返回的值所暗示的（这里是`false`和`true`）。
+如果有函数表达式返回了数字或字符串，类型检查器便会警告我们返回类型和`SearchFunc`接口中定义的返回类型不匹配。
 
 ```ts
 let mySearch: SearchFunc;
@@ -276,10 +289,14 @@ mySearch = function(src, sub) {
 ```
 
 # Indexable Types
+# 可索引类型
 
 Similarly to how we can use interfaces to describe function types, we can also describe types that we can "index into" like `a[10]`, or `ageMap["daniel"]`.
 Indexable types have an *index signature* that describes the types we can use to index into the object, along with the corresponding return types when indexing.
 Let's take an example:
+和我们使用接口来描述函数类型类似，我们同样可以描述我们可以“索引”的类型，比如`a[10]`或`ageMap["daniel"]`。
+可索引类型有一个*索引签名*来描述我们可以用于索引对象的类型，以及索引时相应的返回类型。
+让我们看一个例子：
 
 ```ts
 interface StringArray {
@@ -294,6 +311,8 @@ let myStr: string = myArray[0];
 
 Above, we have a `StringArray` interface that has an index signature.
 This index signature states that when a `StringArray` is indexed with a `number`, it will return a `string`.
+在上面的例子中，我们有一个`StringArray`接口且它有一个索引签名。
+该索引签名指示了当`StringArray`被一个`number`索引时的状态，并返回一个`string`。
 
 There are two types of supported index signatures: string and number.
 It is possible to support both types of indexers, but the type returned from a numeric indexer must be a subtype of the type returned from the string indexer.
