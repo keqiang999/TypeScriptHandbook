@@ -42,7 +42,7 @@ function f() {
 }
 
 var g = f();
-g(); // returns 11;
+g(); // returns '11'
 ```
 
 在上面的例子里，`g`捕获到了在`f`中声明的变量`a`。
@@ -64,7 +64,7 @@ function f() {
     }
 }
 
-f(); // returns 2
+f(); // returns '2'
 ```
 
 ## 作用域规则
@@ -117,7 +117,7 @@ function sumMatrix(matrix: number[][]) {
 
 ```ts
 for (var i = 0; i < 10; i++) {
-    setTimeout(function() {console.log(i); }, 100 * i);
+    setTimeout(function() { console.log(i); }, 100 * i);
 }
 ```
 
@@ -155,11 +155,10 @@ for (var i = 0; i < 10; i++) {
 ```
 
 还记得关于变量捕获我们之前说了什么吗？
+每一个我们传递给`setTimeout`的函数表达式，事实上指向了同一个作用域中的同一个`i`。
 
-> 无论`g`何时被调用，`a`的值将会和`f`中`a`的值绑定。
-
-让我们来考虑下现状。
-`setTimeout`会在经过一定毫秒数后运行一个函数，而这是在`for`循环停止运行后发生的。
+让我们花点时间来考虑这其中的意义。
+`setTimeout`将会在一定毫秒数后运行一个函数，*但仅仅*发生在`for`循环停止运行后；
 在`for`循环停止的时候，`i`的值将会变为`10`。
 所以在每次调用给定函数的时候，它都将打印出`10`！
 
@@ -175,12 +174,12 @@ for (var i = 0; i < 10; i++) {
 }
 ```
 
-这种看上去古怪的模式实际上是十分常见的。
-参数中的`i`实际上遮蔽了`for`循环中声明的变量`i`，我们将它们命名成一样的是因为这样就不用对循环体做太多的修改。
+这种看上去古怪的方式事实上是很常见的。
+参数列表中的`i`实际上遮蔽了`for`循环中声明的变量`i`，我们将它们命名成一样的是因为这样就不用对循环体做太多的修改。
 
 # `let`声明方式
 
-你现在应该能知道使用`var`存在一些问题，而这些问题恰恰是`let`语句成为声明变量的一种新方式的原因。
+你现在应该能知道使用`var`存在一些问题，而这些问题成为了引入`let`语句的原因。
 除了使用的关键字不同，`let`语句和`var`语句使用同样的书写方式。
 
 ```ts
@@ -304,8 +303,8 @@ function f(condition, x) {
     return x;
 }
 
-f(false, 0); // returns 0
-f(true, 0);  // returns 100
+f(false, 0); // returns '0'
+f(true, 0);  // returns '100'
 ```
 
 在多层嵌套作用域中引入一个新的的名称的行为被称为*遮蔽*。
@@ -364,7 +363,7 @@ function theCityThatAlwaysSleeps() {
 
 ```ts
 for (let i = 0; i < 10 ; i++) {
-    setTimeout(function() {console.log(i); }, 100 * i);
+    setTimeout(function() { console.log(i); }, 100 * i);
 }
 ```
 
@@ -417,6 +416,8 @@ kitty.numLives--;
 ```
 
 除非你采取具体手段来进行避免，一个`const`变量的内部状态依然是可修改的。
+幸运的是，TypeScript允许你指定对象中的成员为readonly`的。
+在[接口的章节](./Interfaces.md)中包含更多细节。
 
 # `let` vs. `const`
 

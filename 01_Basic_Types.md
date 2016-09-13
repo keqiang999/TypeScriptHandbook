@@ -33,7 +33,7 @@ TypeScript和JavaScript一样使用双引号(`"`)或单引号(`'`)来包围字�
 
 ```ts
 let color: string = "blue";
-name = 'red';
+color = 'red';
 ```
 
 你同样可以使用 *模板字符串* 来跨行或嵌入表达式。
@@ -79,9 +79,9 @@ let list: Array<number> = [1, 2, 3];
 // Declare a tuple type
 let x: [string, number];
 // Initialize it
-x = ['hello', 10]; // OK
+x = ["hello", 10]; // OK
 // Initialize it incorrectly
-x = [10, 'hello']; // Error
+x = [10, "hello"]; // Error
 ```
 
 当根据已知索引来访问元素时，它正确的类型将会被返回：
@@ -94,11 +94,11 @@ console.log(x[1].substr(1)); // Error, 'number' does not have 'substr'
 当访问一个已知索引外的元素时，将会使用联合类型来做为替代：
 
 ```ts
-x[3] = 'world'; // OK, string can be assigned to (string | number)
+x[3] = "world"; // OK, 'string' can be assigned to 'string | number'
 
-console.log(x[5].toString()); // OK, 'string' and 'number' both have toString
+console.log(x[5].toString()); // OK, 'string' and 'number' both have 'toString'
 
-x[6] = true; // Error, boolean isn't (string | number)
+x[6] = true; // Error, 'boolean' isn't 'string | number'
 ```
 
 联合类型将做为高级话题在我们之后的章节提到。
@@ -185,11 +185,32 @@ function warnUser(): void {
 }
 ```
 
-声明类型为`void`变量并不实用，因为你仅能为它们附上`undefined`值或`null`值： 
+声明类型为`void`变量并不实用，因为你仅能为它们附上`undefined`值或`null`值：
 
 ```ts
 let unusable: void = undefined;
 ```
+
+# Null和Undefined
+
+在TypeScript中，`undefined`和`null`事实上都有它们自己的类型，分别叫做`undefined`和`null`。
+和`void`很像，它们对于自身来说并无多大用处：
+
+```ts
+// Not much else we can assign to these variables!
+let u: undefined = undefined;
+let n: null = null;
+```
+
+在默认情况下`null`和`undefined`是所有其他类型的字类型。
+这意味着你可以给其他类型，比如`number`指定`null`或`undefined`类型。
+
+然而，当使用`--strictNullChecks`标识的时候，`null`和`undefined`仅能分配给`void`和它们各自的类型。
+这有助于避免*许多*常见错误。
+在当你想要传入一个`string`、`null`、`undefined`三者之一时，你可以使用联合类型`string | null | undefined`。
+再一次，我们会在之后更多关注联合类型。
+
+> 说明：我们鼓励尽可能使用`--strictNullChecks`，但是出于这本手册的目的，我们将假定这个标识是关闭的。
 
 # 类型断言
 
