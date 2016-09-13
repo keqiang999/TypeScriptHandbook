@@ -32,7 +32,7 @@ Just like JavaScript, TypeScript also uses double quotes (`"`) or single quotes 
 
 ```ts
 let color: string = "blue";
-name = 'red';
+color = 'red';
 ```
 
 You can also use *template strings*, which can span multiple lines and have embedded expressions.
@@ -78,9 +78,9 @@ For example, you may want to represent a value as a pair of a `string` and a `nu
 // Declare a tuple type
 let x: [string, number];
 // Initialize it
-x = ['hello', 10]; // OK
+x = ["hello", 10]; // OK
 // Initialize it incorrectly
-x = [10, 'hello']; // Error
+x = [10, "hello"]; // Error
 ```
 
 When accessing an element with a known index, the correct type is retrieved:
@@ -93,11 +93,11 @@ console.log(x[1].substr(1)); // Error, 'number' does not have 'substr'
 When accessing an element outside the set of known indices, a union type is used instead:
 
 ```ts
-x[3] = 'world'; // OK, string can be assigned to (string | number)
+x[3] = "world"; // OK, 'string' can be assigned to 'string | number'
 
-console.log(x[5].toString()); // OK, 'string' and 'number' both have toString
+console.log(x[5].toString()); // OK, 'string' and 'number' both have 'toString'
 
-x[6] = true; // Error, boolean isn't (string | number)
+x[6] = true; // Error, 'boolean' isn't 'string | number'
 ```
 
 Union types are an advanced topic that we'll cover in a later chapter.
@@ -189,6 +189,27 @@ Declaring variables of type `void` is not useful because you can only assign `un
 ```ts
 let unusable: void = undefined;
 ```
+
+# Null and Undefined
+
+In TypeScript, both `undefined` and `null` actually have their own types named `undefined` and `null` respectively.
+Much like `void`, they're not extremely useful on their own:
+
+```ts
+// Not much else we can assign to these variables!
+let u: undefined = undefined;
+let n: null = null;
+```
+
+By default `null` and `undefined` are subtypes of all other types.
+That means you can assign `null` and `undefined` to something like `number`.
+
+However, when using the `--strictNullChecks` flag, `null` and `undefined` are only assignable to `void` and their respective types.
+This helps avoid *many* common errors.
+In cases where you want to pass in either a `string` or `null` or `undefined`, you can use the union type `string | null | undefined`.
+Once again, more on union types later on.
+
+> As a note: we encourage the use of `--strictNullChecks` when possible, but for the purposes of this handbook, we will assume it is turned off.
 
 # Type assertions
 

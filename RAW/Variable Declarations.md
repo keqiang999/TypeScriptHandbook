@@ -42,7 +42,7 @@ function f() {
 }
 
 var g = f();
-g(); // returns 11;
+g(); // returns '11'
 ```
 
 In this above example, `g` captured the variable `a` declared in `f`.
@@ -64,7 +64,7 @@ function f() {
     }
 }
 
-f(); // returns 2
+f(); // returns '2'
 ```
 
 ## Scoping rules
@@ -117,7 +117,7 @@ Take a quick second to guess what the output of the following snippet is:
 
 ```ts
 for (var i = 0; i < 10; i++) {
-    setTimeout(function() {console.log(i); }, 100 * i);
+    setTimeout(function() { console.log(i); }, 100 * i);
 }
 ```
 
@@ -155,11 +155,10 @@ Most people expect the output to be
 ```
 
 Remember what we mentioned earlier about variable capturing?
+Every function expression we pass to `setTimeout` actually refers to the same `i` from the same scope.
 
-> At any point that `g` gets called, the value of `a` will be tied to the value of `a` in `f`.
-
-Let's take a minute to consider that in this context.
-`setTimeout` will run a function after some number of milliseconds, and also after the `for` loop has stopped executing.
+Let's take a minute to consider that means.
+`setTimeout` will run a function after some number of milliseconds, *but only* after the `for` loop has stopped executing;
 By the time the `for` loop has stopped executing, the value of `i` is `10`.
 So each time the given function gets called, it will print out `10`!
 
@@ -175,12 +174,12 @@ for (var i = 0; i < 10; i++) {
 }
 ```
 
-This odd-looking pattern is actually a commonplace.
-The `i` in the parameter actually shadows the `i` declared in the `for` loop, but since we named it the same, we didn't have to modify the loop body too much.
+This odd-looking pattern is actually pretty common.
+The `i` in the parameter list actually shadows the `i` declared in the `for` loop, but since we named them the same, we didn't have to modify the loop body too much.
 
 # `let` declarations
 
-By now you've figured out that `var` has some problems, which is precisely why `let` statements are a new way to declare variables.
+By now you've figured out that `var` has some problems, which is precisely why `let` statements were introduced.
 Apart from the keyword used, `let` statements are written the same way `var` statements are.
 
 ```ts
@@ -304,8 +303,8 @@ function f(condition, x) {
     return x;
 }
 
-f(false, 0); // returns 0
-f(true, 0);  // returns 100
+f(false, 0); // returns '0'
+f(true, 0);  // returns '100'
 ```
 
 The act of introducing a new name in a more nested scope is called *shadowing*.
@@ -328,7 +327,7 @@ function sumMatrix(matrix: number[][]) {
 
 This version of the loop will actually perform the summation correctly because the inner loop's `i` shadows `i` from the outer loop.
 
-Shadowing should *usually* be avoided in the interest of write clearer code.
+Shadowing should *usually* be avoided in the interest of writing clearer code.
 While there are some scenarios where it may be fitting to take advantage of it, you should use your best judgement.
 
 ## Block-scoped variable capturing
@@ -364,7 +363,7 @@ Since this is what we were doing anyway with our IIFE, we can change our old `se
 
 ```ts
 for (let i = 0; i < 10 ; i++) {
-    setTimeout(function() {console.log(i); }, 100 * i);
+    setTimeout(function() { console.log(i); }, 100 * i);
 }
 ```
 
@@ -417,6 +416,8 @@ kitty.numLives--;
 ```
 
 Unless you take specific measures to avoid it, the internal state of a `const` variable is still modifiable.
+Fortunately, TypeScript allows you to specify that members of an object are `readonly`.
+The [chapter on Interfaces](./Interfaces.md) has the details.
 
 # `let` vs. `const`
 
